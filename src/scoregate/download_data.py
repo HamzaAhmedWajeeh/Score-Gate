@@ -1,7 +1,9 @@
 """Download the Home Credit Default Risk dataset via the Kaggle API.
 
-Needs kaggle.json in ~/.kaggle or KAGGLE_CONFIG_DIR, and the competition
-rules accepted on the Kaggle website. Data lands in data/raw and is never
+Authentication is handled by the kaggle package itself: an API token at
+~/.kaggle/access_token or in KAGGLE_API_TOKEN (kaggle>=1.8), or a legacy
+kaggle.json in ~/.kaggle or KAGGLE_CONFIG_DIR. The competition rules must
+be accepted on the Kaggle website. Data lands in data/raw and is never
 committed.
 """
 
