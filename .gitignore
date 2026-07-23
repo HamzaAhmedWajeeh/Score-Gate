@@ -1,0 +1,13 @@
+data/
+*.csv
+*.duckdb
+.env
+kaggle.json
+.claude/
+CLAUDE.md
+scoregate-build-spec.md
+wandb/
+mlruns/
+artifacts/
+__pycache__/
+.venv/
