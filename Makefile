@@ -1,9 +1,15 @@
+ifeq ($(OS),Windows_NT)
 PY := .venv/Scripts/python.exe
+VENV := py -3.11 -m venv .venv
+else
+PY := .venv/bin/python
+VENV := python3.11 -m venv .venv
+endif
 
 .PHONY: install lint test
 
 install:
-	py -3.11 -m venv .venv
+	$(VENV)
 	$(PY) -m pip install --upgrade pip
 	$(PY) -m pip install -e ".[dev]"
 
