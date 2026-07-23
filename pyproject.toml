@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scoregate"
+version = "0.1.0"
+description = "Governed credit-risk scoring pipeline: scorecard plus challenger, gated promotion, audit trail"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Hamza Ahmed Wajeeh", email = "hamzaahmedwajeeh@gmail.com" }]
+dependencies = [
+    "pandas>=2.1",
+    "numpy>=1.26",
+    "duckdb>=0.10",
+    "pandera>=0.18",
+    "optbinning>=0.19",
+    "scikit-learn>=1.4",
+    "lightgbm>=4.3",
+    "shap>=0.45",
+    "wandb>=0.16",
+    "mlflow>=2.12",
+    "kaggle>=1.6",
+    "matplotlib>=3.8",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+    "types-PyYAML",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["scoregate"]
+strict = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "optbinning.*",
+    "shap.*",
+    "lightgbm.*",
+    "sklearn.*",
+    "wandb.*",
+    "mlflow.*",
+    "kaggle.*",
+    "pandera.*",
+    "duckdb.*",
+    "matplotlib.*",
+    "scipy.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
