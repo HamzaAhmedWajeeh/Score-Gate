@@ -10,4 +10,5 @@ wandb/
 mlruns/
 artifacts/
 __pycache__/
+*.egg-info/
 .venv/
