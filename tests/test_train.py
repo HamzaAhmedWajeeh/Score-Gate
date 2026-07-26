@@ -4,11 +4,12 @@ These cover the pure helpers that reshape already-persisted records for W&B. The
 full online/offline pipeline is verified end to end outside the unit suite.
 """
 
-from pathlib import Path
-
-from scoregate.train import _feature_iv_table, _flat_metrics, _reliability_figure
-
-SELECTION_PATH = Path("feature_selection.json")
+from scoregate.train import (
+    _fairness_metrics,
+    _feature_iv_table,
+    _flat_metrics,
+    _reliability_figure,
+)
 
 
 def test_flat_metrics_flattens_record() -> None:
@@ -23,6 +24,16 @@ def test_flat_metrics_flattens_record() -> None:
     assert metrics["overfit_gap_gini"] == 0.10
 
 
+def test_fairness_metrics_flattens_gaps() -> None:
+    model_fairness = {
+        "gender": {"approval_rate_gap": 0.05, "tpr_gap": 0.04, "fpr_gap": 0.05},
+        "age_band": {"approval_rate_gap": 0.40, "tpr_gap": 0.30, "fpr_gap": 0.35},
+    }
+    metrics = _fairness_metrics(model_fairness)
+    assert metrics["fairness/gender_approval_gap"] == 0.05
+    assert metrics["fairness/age_tpr_gap"] == 0.30
+
+
 def test_reliability_figure_builds() -> None:
     reliability = [
         {"mean_predicted": 0.1, "observed_rate": 0.05, "count": 10},
@@ -34,6 +45,6 @@ def test_reliability_figure_builds() -> None:
 
 
 def test_feature_iv_table_from_committed_selection() -> None:
-    table = _feature_iv_table(SELECTION_PATH)
+    table = _feature_iv_table()
     assert set(table.columns) == {"feature", "iv", "disposition"}
     assert len(table) == 34  # every candidate feature, selected or dropped

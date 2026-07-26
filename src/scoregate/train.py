@@ -1,14 +1,16 @@
-"""Train orchestrator: run the model steps, then mirror their results into W&B.
+"""End-to-end training orchestrator, and the W&B mirror.
 
-This is the make train skeleton. It runs the existing build and evaluate steps and
-reads the numbers they persist, then reflects them into one W&B run per model. It
-computes and re-evaluates nothing: evaluation.json is the single source of truth for
-metrics and reliability, and W&B only mirrors it. A value the orchestrator needs but
-cannot find persisted is a signal the upstream step should persist it, not that the
-orchestrator should compute it.
+make train runs the whole reproducible pipeline in order: fit both models, evaluate
+them on the frozen holdout, calibrate, snapshot fairness, and register both in MLflow
+with champion/challenger aliases. One command reproduces the run and the registry
+state.
 
-W&B is optional and offline-safe (see tracking). --no-wandb disables it entirely, and
-the pipeline produces identical artifacts either way.
+Each step persists its own outputs; this orchestrator then reads those persisted
+records and mirrors them into one W&B run per model. It computes and re-evaluates
+nothing: evaluation.json, calibration.json, and fairness.json are the single sources
+of truth, and W&B only reflects them. W&B is optional and offline-safe (see tracking);
+--no-wandb disables it entirely and the pipeline produces identical artifacts either
+way.
 """
 
 import argparse
@@ -18,14 +20,28 @@ from typing import Any
 
 import pandas as pd
 
+from scoregate.calibration import build_calibration
 from scoregate.challenger import DEFAULT_PARAMS_PATH, build_challenger
 from scoregate.config import HOLDOUT_FRACTION, SEED
 from scoregate.evaluate import build_evaluation
+from scoregate.fairness import build_fairness
+from scoregate.registry import register
 from scoregate.scorecard import BASE_ODDS, BASE_SCORE, PDO, build_scorecard
-from scoregate.tracking import make_tracker
+from scoregate.tracking import RunTracker, make_tracker
 
 WANDB_PROJECT = "scoregate"
 RUN_GROUP = "phase1-baseline"
+
+ARTIFACTS = Path("artifacts")
+BINNING_ARTIFACT = ARTIFACTS / "binning_process.pkl"
+SCORECARD_ARTIFACT = ARTIFACTS / "scorecard.pkl"
+CHALLENGER_ARTIFACT = ARTIFACTS / "challenger.pkl"
+CALIBRATED_SCORECARD = ARTIFACTS / "calibrated_scorecard.pkl"
+CALIBRATED_CHALLENGER = ARTIFACTS / "calibrated_challenger.pkl"
+SELECTION_PATH = Path("feature_selection.json")
+EVALUATION_PATH = Path("evaluation.json")
+CALIBRATION_PATH = Path("calibration.json")
+FAIRNESS_PATH = Path("fairness.json")
 
 
 def _flat_metrics(model_record: dict[str, Any]) -> dict[str, float]:
@@ -35,6 +51,15 @@ def _flat_metrics(model_record: dict[str, Any]) -> dict[str, float]:
             metrics[f"{split}/{name}"] = value
     metrics["overfit_gap_gini"] = model_record["train_minus_holdout_gini"]
     return metrics
+
+
+def _fairness_metrics(model_fairness: dict[str, Any]) -> dict[str, float]:
+    return {
+        "fairness/gender_approval_gap": model_fairness["gender"]["approval_rate_gap"],
+        "fairness/gender_tpr_gap": model_fairness["gender"]["tpr_gap"],
+        "fairness/age_approval_gap": model_fairness["age_band"]["approval_rate_gap"],
+        "fairness/age_tpr_gap": model_fairness["age_band"]["tpr_gap"],
+    }
 
 
 def _reliability_figure(reliability: list[dict[str, Any]], title: str) -> Any:
@@ -55,8 +80,8 @@ def _reliability_figure(reliability: list[dict[str, Any]], title: str) -> Any:
     return figure
 
 
-def _feature_iv_table(selection_path: Path) -> pd.DataFrame:
-    selection = json.loads(selection_path.read_text(encoding="utf-8"))
+def _feature_iv_table() -> pd.DataFrame:
+    selection = json.loads(SELECTION_PATH.read_text(encoding="utf-8"))
     return pd.DataFrame(
         [
             {"feature": f["name"], "iv": f["iv"], "disposition": f["disposition"]}
@@ -65,28 +90,47 @@ def _feature_iv_table(selection_path: Path) -> pd.DataFrame:
     )
 
 
-def train(
-    db_path: Path,
-    *,
-    disabled: bool,
-    binning_artifact: Path = Path("artifacts/binning_process.pkl"),
-    selection_path: Path = Path("feature_selection.json"),
-    scorecard_artifact: Path = Path("artifacts/scorecard.pkl"),
-    params_path: Path = DEFAULT_PARAMS_PATH,
-    challenger_artifact: Path = Path("artifacts/challenger.pkl"),
-    evaluation_path: Path = Path("evaluation.json"),
-) -> None:
-    # Run the pipeline steps; each one persists its own outputs.
-    scorecard = build_scorecard(db_path, binning_artifact, selection_path, scorecard_artifact)
-    challenger = build_challenger(db_path, params_path, challenger_artifact)
-    build_evaluation(db_path, scorecard_artifact, challenger_artifact, evaluation_path)
+def _log_curves(tracker: RunTracker, model_key: str, calibration: dict[str, Any]) -> None:
+    if not tracker.enabled:
+        return
+    reliability = calibration["models"][model_key]
+    before = _reliability_figure(reliability["before"]["reliability"], f"{model_key} uncalibrated")
+    after = _reliability_figure(reliability["after"]["reliability"], f"{model_key} calibrated")
+    tracker.log_figure("reliability_before", before)
+    tracker.log_figure("reliability_after", after)
 
-    # Read back only what the steps already produced, and mirror it.
-    record = json.loads(evaluation_path.read_text(encoding="utf-8"))
-    models = record["models"]
 
-    scorecard_run = models["scorecard"]
-    tracker = make_tracker(
+def train(db_path: Path, *, disabled: bool) -> None:
+    # Run the whole pipeline; each step persists its own outputs.
+    scorecard = build_scorecard(db_path, BINNING_ARTIFACT, SELECTION_PATH, SCORECARD_ARTIFACT)
+    challenger = build_challenger(db_path, DEFAULT_PARAMS_PATH, CHALLENGER_ARTIFACT)
+    build_evaluation(db_path, SCORECARD_ARTIFACT, CHALLENGER_ARTIFACT, EVALUATION_PATH)
+    build_calibration(
+        db_path,
+        SELECTION_PATH,
+        SCORECARD_ARTIFACT,
+        CHALLENGER_ARTIFACT,
+        DEFAULT_PARAMS_PATH,
+        CALIBRATED_SCORECARD,
+        CALIBRATED_CHALLENGER,
+        CALIBRATION_PATH,
+    )
+    build_fairness(db_path, CALIBRATED_SCORECARD, CALIBRATED_CHALLENGER, FAIRNESS_PATH)
+    register(
+        db_path,
+        EVALUATION_PATH,
+        CALIBRATION_PATH,
+        FAIRNESS_PATH,
+        CALIBRATED_SCORECARD,
+        CALIBRATED_CHALLENGER,
+    )
+
+    # Read back only what the steps persisted, and mirror it into W&B.
+    evaluation = json.loads(EVALUATION_PATH.read_text(encoding="utf-8"))
+    calibration = json.loads(CALIBRATION_PATH.read_text(encoding="utf-8"))
+    fairness = json.loads(FAIRNESS_PATH.read_text(encoding="utf-8"))
+
+    scorecard_tracker = make_tracker(
         project=WANDB_PROJECT,
         name="scorecard",
         group=RUN_GROUP,
@@ -102,16 +146,14 @@ def train(
         },
         disabled=disabled,
     )
-    tracker.log(_flat_metrics(scorecard_run))
-    tracker.log_table("points_table", scorecard.points_table())
-    tracker.log_table("feature_ivs", _feature_iv_table(selection_path))
-    if tracker.enabled:
-        figure = _reliability_figure(scorecard_run["holdout_reliability"], "scorecard reliability")
-        tracker.log_figure("reliability_holdout", figure)
-    tracker.finish()
+    scorecard_tracker.log(_flat_metrics(evaluation["models"]["scorecard"]))
+    scorecard_tracker.log(_fairness_metrics(fairness["models"]["scorecard"]))
+    scorecard_tracker.log_table("points_table", scorecard.points_table())
+    scorecard_tracker.log_table("feature_ivs", _feature_iv_table())
+    _log_curves(scorecard_tracker, "scorecard", calibration)
+    scorecard_tracker.finish()
 
-    challenger_run = models["challenger"]
-    tracker = make_tracker(
+    challenger_tracker = make_tracker(
         project=WANDB_PROJECT,
         name="challenger",
         group=RUN_GROUP,
@@ -124,15 +166,14 @@ def train(
         },
         disabled=disabled,
     )
-    tracker.log(_flat_metrics(challenger_run))
+    challenger_tracker.log(_flat_metrics(evaluation["models"]["challenger"]))
+    challenger_tracker.log(_fairness_metrics(fairness["models"]["challenger"]))
     importances = pd.DataFrame(
         {"feature": challenger.features, "importance": challenger.model.feature_importances_}
     ).sort_values("importance", ascending=False)
-    tracker.log_table("feature_importances", importances)
-    if tracker.enabled:
-        reliability = challenger_run["holdout_reliability"]
-        tracker.log_figure("reliability_holdout", _reliability_figure(reliability, "challenger"))
-    tracker.finish()
+    challenger_tracker.log_table("feature_importances", importances)
+    _log_curves(challenger_tracker, "challenger", calibration)
+    challenger_tracker.finish()
 
 
 def main() -> None:
