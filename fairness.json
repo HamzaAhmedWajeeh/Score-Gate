@@ -1,0 +1,138 @@
+{
+  "approval_rate_target": 0.8,
+  "framing": "Educational and illustrative. CODE_GENDER is not a model feature; it is used only to measure outcomes. Metrics are computed on the frozen holdout with calibrated probabilities.",
+  "models": {
+    "scorecard": {
+      "approval_pd_threshold": 0.116131,
+      "overall_approval_rate": 0.800563,
+      "gender": {
+        "groups": {
+          "F": {
+            "n": 40561,
+            "approval_rate": 0.818816,
+            "tpr": 0.842147,
+            "fpr": 0.508463
+          },
+          "M": {
+            "n": 20940,
+            "approval_rate": 0.765234,
+            "tpr": 0.799798,
+            "fpr": 0.45984
+          }
+        },
+        "approval_rate_gap": 0.053582,
+        "tpr_gap": 0.042349,
+        "fpr_gap": 0.048623
+      },
+      "age_band": {
+        "groups": {
+          "<25": {
+            "n": 2392,
+            "approval_rate": 0.521321,
+            "tpr": 0.555871,
+            "fpr": 0.260714
+          },
+          "25-34": {
+            "n": 14368,
+            "approval_rate": 0.683254,
+            "tpr": 0.722598,
+            "fpr": 0.348976
+          },
+          "35-44": {
+            "n": 16889,
+            "approval_rate": 0.811771,
+            "tpr": 0.84009,
+            "fpr": 0.498213
+          },
+          "45-54": {
+            "n": 14039,
+            "approval_rate": 0.849633,
+            "tpr": 0.872396,
+            "fpr": 0.562136
+          },
+          "55-64": {
+            "n": 12165,
+            "approval_rate": 0.902178,
+            "tpr": 0.913161,
+            "fpr": 0.717836
+          },
+          "65+": {
+            "n": 1650,
+            "approval_rate": 0.945455,
+            "tpr": 0.947203,
+            "fpr": 0.898305
+          }
+        },
+        "approval_rate_gap": 0.424134,
+        "tpr_gap": 0.391332,
+        "fpr_gap": 0.637591
+      }
+    },
+    "challenger": {
+      "approval_pd_threshold": 0.125666,
+      "overall_approval_rate": 0.817814,
+      "gender": {
+        "groups": {
+          "F": {
+            "n": 40561,
+            "approval_rate": 0.839205,
+            "tpr": 0.862584,
+            "fpr": 0.528209
+          },
+          "M": {
+            "n": 20940,
+            "approval_rate": 0.776409,
+            "tpr": 0.814204,
+            "fpr": 0.442461
+          }
+        },
+        "approval_rate_gap": 0.062796,
+        "tpr_gap": 0.04838,
+        "fpr_gap": 0.085748
+      },
+      "age_band": {
+        "groups": {
+          "<25": {
+            "n": 2392,
+            "approval_rate": 0.63796,
+            "tpr": 0.677557,
+            "fpr": 0.339286
+          },
+          "25-34": {
+            "n": 14368,
+            "approval_rate": 0.717288,
+            "tpr": 0.758071,
+            "fpr": 0.370787
+          },
+          "35-44": {
+            "n": 16889,
+            "approval_rate": 0.806975,
+            "tpr": 0.836992,
+            "fpr": 0.474625
+          },
+          "45-54": {
+            "n": 14039,
+            "approval_rate": 0.855189,
+            "tpr": 0.878776,
+            "fpr": 0.557282
+          },
+          "55-64": {
+            "n": 12165,
+            "approval_rate": 0.921825,
+            "tpr": 0.934065,
+            "fpr": 0.716374
+          },
+          "65+": {
+            "n": 1650,
+            "approval_rate": 0.98,
+            "tpr": 0.981144,
+            "fpr": 0.949153
+          }
+        },
+        "approval_rate_gap": 0.34204,
+        "tpr_gap": 0.303587,
+        "fpr_gap": 0.609867
+      }
+    }
+  }
+}
