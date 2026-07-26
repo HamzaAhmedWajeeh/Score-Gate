@@ -8,6 +8,7 @@ CLAUDE.md
 scoregate-build-spec.md
 wandb/
 mlruns/
+mlartifacts/
 artifacts/
 __pycache__/
 *.egg-info/
