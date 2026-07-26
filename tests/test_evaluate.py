@@ -9,10 +9,11 @@ import json
 from pathlib import Path
 
 import duckdb
+import numpy as np
 import pandas as pd
 import pytest
 
-from scoregate.evaluate import build_evaluation, evaluate_model
+from scoregate.evaluate import build_evaluation, evaluate_model, reliability_curve
 
 DB_PATH = Path("data/scoregate.duckdb")
 SCORECARD_ARTIFACT = Path("artifacts/scorecard.pkl")
@@ -40,6 +41,21 @@ def test_overfit_gap_is_train_minus_holdout() -> None:
     assert ev.train_minus_holdout_gini == round(ev.train.gini - ev.holdout.gini, 6)
 
 
+def test_reliability_curve_structure() -> None:
+    rng = np.random.default_rng(0)
+    n = 5000
+    predicted = rng.random(n)
+    target = pd.Series((rng.random(n) < predicted).astype(int))  # observed tracks predicted
+    curve = reliability_curve(target, pd.Series(predicted), n_bins=10)
+
+    assert len(curve) == 10
+    assert set(curve[0]) == {"mean_predicted", "observed_rate", "count"}
+    assert sum(int(row["count"]) for row in curve) == n
+    means = [row["mean_predicted"] for row in curve]
+    assert means == sorted(means)  # deciles ordered by predicted PD
+    assert curve[0]["observed_rate"] < curve[-1]["observed_rate"]
+
+
 # --- real data, skip when absent -------------------------------------------
 
 
@@ -65,6 +81,8 @@ def test_real_evaluation_matches_record(tmp_path: Path) -> None:
         # holdout discrimination is real, and generalisation gap is non-negative
         assert holdout["auc"] > 0.70
         assert models[name]["train_minus_holdout_gini"] >= 0.0
+        # the holdout reliability curve is persisted for downstream consumers
+        assert len(models[name]["holdout_reliability"]) == 10
 
     # the challenger overfits more than the scorecard, as expected
     assert (

@@ -12,7 +12,59 @@
         "ks": 0.374602,
         "gini": 0.500549
       },
-      "train_minus_holdout_gini": 0.002467
+      "train_minus_holdout_gini": 0.002467,
+      "holdout_reliability": [
+        {
+          "mean_predicted": 0.130412,
+          "observed_rate": 0.012518,
+          "count": 6151
+        },
+        {
+          "mean_predicted": 0.202015,
+          "observed_rate": 0.024228,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.257316,
+          "observed_rate": 0.029268,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.310931,
+          "observed_rate": 0.037724,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.365718,
+          "observed_rate": 0.049911,
+          "count": 6151
+        },
+        {
+          "mean_predicted": 0.424861,
+          "observed_rate": 0.055122,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.490152,
+          "observed_rate": 0.082602,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.565796,
+          "observed_rate": 0.101626,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.656856,
+          "observed_rate": 0.15252,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.791778,
+          "observed_rate": 0.261746,
+          "count": 6151
+        }
+      ]
     },
     "challenger": {
       "train": {
@@ -25,7 +77,59 @@
         "ks": 0.399788,
         "gini": 0.532201
       },
-      "train_minus_holdout_gini": 0.098022
+      "train_minus_holdout_gini": 0.098022,
+      "holdout_reliability": [
+        {
+          "mean_predicted": 0.098658,
+          "observed_rate": 0.012356,
+          "count": 6151
+        },
+        {
+          "mean_predicted": 0.16427,
+          "observed_rate": 0.017398,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.216565,
+          "observed_rate": 0.025854,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.269676,
+          "observed_rate": 0.037886,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.32882,
+          "observed_rate": 0.04796,
+          "count": 6151
+        },
+        {
+          "mean_predicted": 0.394628,
+          "observed_rate": 0.057073,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.468973,
+          "observed_rate": 0.071707,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.552614,
+          "observed_rate": 0.09935,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.65114,
+          "observed_rate": 0.156748,
+          "count": 6150
+        },
+        {
+          "mean_predicted": 0.785201,
+          "observed_rate": 0.28093,
+          "count": 6151
+        }
+      ]
     }
   }
 }

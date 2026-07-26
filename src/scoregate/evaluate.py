@@ -63,6 +63,29 @@ def evaluate_model(
     )
 
 
+def reliability_curve(
+    target: pd.Series, pd_hat: pd.Series, n_bins: int = 10
+) -> list[dict[str, object]]:
+    """Per-decile mean predicted PD versus observed default rate on the holdout.
+
+    This is the uncalibrated reliability curve; calibration adds the after-curve
+    later. It is computed here, with the rest of the holdout reporting, so no
+    downstream consumer has to re-touch the holdout to draw it.
+    """
+    frame = pd.DataFrame({"y": target.to_numpy(), "p": pd_hat.to_numpy()})
+    frame["decile"] = pd.qcut(frame["p"], q=n_bins, labels=False, duplicates="drop")
+    rows: list[dict[str, object]] = []
+    for _, group in frame.groupby("decile"):
+        rows.append(
+            {
+                "mean_predicted": round(float(group["p"].mean()), 6),
+                "observed_rate": round(float(group["y"].mean()), 6),
+                "count": int(len(group)),
+            }
+        )
+    return rows
+
+
 def _load_split(con: duckdb.DuckDBPyConnection, split: str) -> pd.DataFrame:
     return con.execute(
         """
@@ -89,14 +112,23 @@ def build_evaluation(
         train = _load_split(con, "train")
         holdout = _load_split(con, "holdout")
 
+    models: dict[str, PredictPD] = {
+        "scorecard": scorecard.predict_pd,
+        "challenger": challenger.predict_pd,
+    }
     evaluations = {
-        "scorecard": evaluate_model(scorecard.predict_pd, train, holdout),
-        "challenger": evaluate_model(challenger.predict_pd, train, holdout),
+        name: evaluate_model(predict, train, holdout) for name, predict in models.items()
     }
 
     record: dict[str, object] = {
         "seed": SEED,
-        "models": {name: asdict(ev) for name, ev in evaluations.items()},
+        "models": {
+            name: {
+                **asdict(evaluations[name]),
+                "holdout_reliability": reliability_curve(holdout["TARGET"], predict(holdout)),
+            }
+            for name, predict in models.items()
+        },
     }
     evaluation_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
