@@ -6,7 +6,7 @@ PY := .venv/bin/python
 VENV := python3.11 -m venv .venv
 endif
 
-.PHONY: install lint test
+.PHONY: install lint test download ingest features contract
 
 install:
 	$(VENV)
@@ -20,3 +20,19 @@ lint:
 
 test:
 	$(PY) -m pytest
+
+# Data acquisition is expensive and one-time, so download and ingest stay
+# independent. The training pipeline order is features, then contract, then
+# training, expressed as prerequisites so the gate always runs on freshly built
+# features and training will only ever run behind a passing contract.
+download:
+	$(PY) -m scoregate.download_data
+
+ingest:
+	$(PY) -m scoregate.ingest
+
+features:
+	$(PY) -m scoregate.features
+
+contract: features
+	$(PY) -m scoregate.contracts

@@ -66,6 +66,7 @@ module = [
     "duckdb.*",
     "matplotlib.*",
     "scipy.*",
+    "pandas.*",
 ]
 ignore_missing_imports = true
 
