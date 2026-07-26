@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "models": {
+    "scorecard": {
+      "train": {
+        "auc": 0.751508,
+        "ks": 0.376216,
+        "gini": 0.503016
+      },
+      "holdout": {
+        "auc": 0.750275,
+        "ks": 0.374602,
+        "gini": 0.500549
+      },
+      "train_minus_holdout_gini": 0.002467
+    },
+    "challenger": {
+      "train": {
+        "auc": 0.815112,
+        "ks": 0.46807,
+        "gini": 0.630223
+      },
+      "holdout": {
+        "auc": 0.766101,
+        "ks": 0.399788,
+        "gini": 0.532201
+      },
+      "train_minus_holdout_gini": 0.098022
+    }
+  }
+}

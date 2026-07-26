@@ -6,7 +6,7 @@ PY := .venv/bin/python
 VENV := python3.11 -m venv .venv
 endif
 
-.PHONY: install lint test download ingest features contract split binning scorecard challenger
+.PHONY: install lint test download ingest features contract split binning scorecard challenger evaluate
 
 install:
 	$(VENV)
@@ -48,3 +48,6 @@ scorecard: binning
 
 challenger: split
 	$(PY) -m scoregate.challenger
+
+evaluate: scorecard challenger
+	$(PY) -m scoregate.evaluate
