@@ -1,0 +1,12 @@
+# Frozen LightGBM challenger hyperparameters. This is the deterministic baseline;
+# make sweep tunes from here and the winning params get written back into this file
+# as their own commit. subsample only takes effect with subsample_freq > 0.
+n_estimators: 300
+learning_rate: 0.05
+num_leaves: 31
+max_depth: -1
+subsample: 0.8
+subsample_freq: 1
+colsample_bytree: 0.8
+reg_lambda: 1.0
+min_child_samples: 50
