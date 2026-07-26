@@ -1,0 +1,218 @@
+{
+  "iv_drop_threshold": 0.02,
+  "iv_leakage_threshold": 0.5,
+  "keep_overrides": {
+    "annuity_to_income": "Debt-burden-ratio proxy; SAMA responsible-lending rules mandate DBR consideration, so a domain-required characteristic clears a lower IV bar than the default 0.02 threshold."
+  },
+  "leakage_keep_rationales": {
+    "ext_source_mean": "Aggregate of external bureau scores, designed to be predictive of default. The high IV reflects genuine signal strength, not target leakage. Reviewed and kept."
+  },
+  "n_candidates": 34,
+  "n_selected": 22,
+  "features": [
+    {
+      "name": "ext_source_mean",
+      "iv": 0.627214,
+      "disposition": "kept-with-leakage-rationale",
+      "selected": true
+    },
+    {
+      "name": "ext_source_min",
+      "iv": 0.47693,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "EXT_SOURCE_3",
+      "iv": 0.335337,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "EXT_SOURCE_2",
+      "iv": 0.319012,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "EXT_SOURCE_1",
+      "iv": 0.147981,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "DAYS_EMPLOYED",
+      "iv": 0.11537,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "bureau_debt_to_credit",
+      "iv": 0.100519,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "employed_share",
+      "iv": 0.091639,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "DAYS_BIRTH",
+      "iv": 0.090281,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "bureau_recency",
+      "iv": 0.085291,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "credit_to_goods",
+      "iv": 0.073399,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "prev_refused_share",
+      "iv": 0.069998,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "inst_late_share",
+      "iv": 0.065128,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "card_rolling_util_6m",
+      "iv": 0.064817,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "AMT_CREDIT",
+      "iv": 0.05917,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "bureau_active_count",
+      "iv": 0.054664,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "inst_shortfall_share",
+      "iv": 0.052314,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "employment_recorded",
+      "iv": 0.033606,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "AMT_ANNUITY",
+      "iv": 0.029737,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "inst_mean_delay",
+      "iv": 0.029284,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "prev_approved_credit_mean",
+      "iv": 0.024304,
+      "disposition": "kept",
+      "selected": true
+    },
+    {
+      "name": "bureau_credit_count",
+      "iv": 0.015306,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "credit_to_income",
+      "iv": 0.01356,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "AMT_INCOME_TOTAL",
+      "iv": 0.012427,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "bureau_overdue_max",
+      "iv": 0.01169,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "bureau_prolong_sum",
+      "iv": 0.01169,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "inst_delay_trend",
+      "iv": 0.011297,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "prev_app_count",
+      "iv": 0.011095,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "ext_source_count",
+      "iv": 0.010807,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "annuity_to_income",
+      "iv": 0.008069,
+      "disposition": "kept-override",
+      "selected": true
+    },
+    {
+      "name": "CNT_CHILDREN",
+      "iv": 0.006222,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "card_count",
+      "iv": 0.002539,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "bureau_current_dpd_count",
+      "iv": 1.9e-05,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    },
+    {
+      "name": "bureau_ever_dpd3_share",
+      "iv": 1.9e-05,
+      "disposition": "dropped-low-iv",
+      "selected": false
+    }
+  ]
+}

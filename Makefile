@@ -6,7 +6,7 @@ PY := .venv/bin/python
 VENV := python3.11 -m venv .venv
 endif
 
-.PHONY: install lint test download ingest features contract split
+.PHONY: install lint test download ingest features contract split binning
 
 install:
 	$(VENV)
@@ -39,3 +39,6 @@ contract: features
 
 split: contract
 	$(PY) -m scoregate.split
+
+binning: split
+	$(PY) -m scoregate.binning
