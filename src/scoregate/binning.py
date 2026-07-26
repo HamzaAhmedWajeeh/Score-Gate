@@ -114,6 +114,7 @@ def build_binning(
             FROM features f
             JOIN split_assignment s USING (SK_ID_CURR)
             WHERE s.split = 'train'
+            ORDER BY f.SK_ID_CURR
             """
         ).df()
 

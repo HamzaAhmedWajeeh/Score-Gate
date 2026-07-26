@@ -89,6 +89,7 @@ def build_challenger(db_path: Path, params_path: Path, artifact_path: Path) -> C
             FROM features f
             JOIN split_assignment s USING (SK_ID_CURR)
             WHERE s.split = 'train'
+            ORDER BY f.SK_ID_CURR
             """
         ).df()
 

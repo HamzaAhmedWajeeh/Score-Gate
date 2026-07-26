@@ -93,6 +93,7 @@ def _load_split(con: duckdb.DuckDBPyConnection, split: str) -> pd.DataFrame:
         FROM features f
         JOIN split_assignment s USING (SK_ID_CURR)
         WHERE s.split = ?
+        ORDER BY f.SK_ID_CURR
         """,
         [split],
     ).df()

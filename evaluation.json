@@ -68,65 +68,65 @@
     },
     "challenger": {
       "train": {
-        "auc": 0.815112,
-        "ks": 0.46807,
-        "gini": 0.630223
+        "auc": 0.814984,
+        "ks": 0.467869,
+        "gini": 0.629969
       },
       "holdout": {
-        "auc": 0.766101,
-        "ks": 0.399788,
-        "gini": 0.532201
+        "auc": 0.765655,
+        "ks": 0.404382,
+        "gini": 0.531311
       },
-      "train_minus_holdout_gini": 0.098022,
+      "train_minus_holdout_gini": 0.098658,
       "holdout_reliability": [
         {
-          "mean_predicted": 0.098658,
-          "observed_rate": 0.012356,
+          "mean_predicted": 0.096961,
+          "observed_rate": 0.012193,
           "count": 6151
         },
         {
-          "mean_predicted": 0.16427,
-          "observed_rate": 0.017398,
+          "mean_predicted": 0.16338,
+          "observed_rate": 0.018537,
           "count": 6150
         },
         {
-          "mean_predicted": 0.216565,
-          "observed_rate": 0.025854,
+          "mean_predicted": 0.215917,
+          "observed_rate": 0.025366,
           "count": 6150
         },
         {
-          "mean_predicted": 0.269676,
-          "observed_rate": 0.037886,
+          "mean_predicted": 0.269376,
+          "observed_rate": 0.038049,
           "count": 6150
         },
         {
-          "mean_predicted": 0.32882,
-          "observed_rate": 0.04796,
+          "mean_predicted": 0.328192,
+          "observed_rate": 0.050236,
           "count": 6151
         },
         {
-          "mean_predicted": 0.394628,
-          "observed_rate": 0.057073,
+          "mean_predicted": 0.394479,
+          "observed_rate": 0.050569,
           "count": 6150
         },
         {
-          "mean_predicted": 0.468973,
-          "observed_rate": 0.071707,
+          "mean_predicted": 0.467502,
+          "observed_rate": 0.073171,
           "count": 6150
         },
         {
-          "mean_predicted": 0.552614,
-          "observed_rate": 0.09935,
+          "mean_predicted": 0.552844,
+          "observed_rate": 0.105203,
           "count": 6150
         },
         {
-          "mean_predicted": 0.65114,
-          "observed_rate": 0.156748,
+          "mean_predicted": 0.652469,
+          "observed_rate": 0.152683,
           "count": 6150
         },
         {
-          "mean_predicted": 0.785201,
-          "observed_rate": 0.28093,
+          "mean_predicted": 0.78606,
+          "observed_rate": 0.281255,
           "count": 6151
         }
       ]
