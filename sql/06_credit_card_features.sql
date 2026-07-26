@@ -25,13 +25,18 @@ rolled AS (
     FROM base
 ),
 latest AS (
-    -- Each card's most recent trailing-6-month utilisation.
+    -- One row per card, holding its most recent trailing-6-month utilisation.
     SELECT SK_ID_CURR, rolling_util_6m
     FROM rolled
     WHERE recency_rank = 1
 )
 SELECT
     SK_ID_CURR,
+    -- Number of distinct card contracts on file; a presence signal that restores
+    -- source symmetry. A NULL card_count downstream means "no card history in this
+    -- source", so a NULL card_rolling_util_6m among holders cleanly means the
+    -- utilisation was undefined (a zero credit limit), not missing history.
+    COUNT(*) AS card_count,
     -- Mean latest rolling utilisation across the applicant's cards; sustained high
     -- utilisation is a classic early distress signal.
     AVG(rolling_util_6m) AS card_rolling_util_6m

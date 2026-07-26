@@ -21,6 +21,7 @@ SELECT
     i.inst_shortfall_share,
     i.inst_mean_delay,
     i.inst_delay_trend,
+    c.card_count,
     c.card_rolling_util_6m
 FROM feat_application a
 LEFT JOIN feat_bureau b USING (SK_ID_CURR)
