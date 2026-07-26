@@ -119,6 +119,13 @@ def gini(y_true: ArrayLike, y_score: ArrayLike) -> float:
     return 2.0 * roc_auc(y_true, y_score) - 1.0
 
 
+def brier_score(y_true: ArrayLike, y_prob: ArrayLike) -> float:
+    """Mean squared error between predicted probabilities and outcomes; lower is better."""
+    y = np.asarray(y_true, dtype=np.float64)
+    prob = np.asarray(y_prob, dtype=np.float64)
+    return float(np.mean((prob - y) ** 2))
+
+
 def ks_statistic(y_true: ArrayLike, y_score: ArrayLike) -> float:
     """KS: the largest gap between the cumulative bad and good rates over sorted scores."""
     y = np.asarray(y_true, dtype=np.float64)

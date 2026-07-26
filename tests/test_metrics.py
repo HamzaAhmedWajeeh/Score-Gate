@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 from scoregate.metrics import (
+    brier_score,
     gini,
     ks_statistic,
     psi,
@@ -81,6 +82,12 @@ def test_gini_near_zero_on_random() -> None:
     y = rng.integers(0, 2, 20_000)
     score = rng.random(20_000)
     assert abs(gini(y, score)) < 0.05
+
+
+def test_brier_score() -> None:
+    y = np.array([0, 0, 1, 1])
+    assert brier_score(y, y.astype(float)) == 0.0  # perfect predictions
+    assert brier_score(y, np.full(4, 0.5)) == 0.25  # uninformative 0.5
 
 
 def test_gini_matches_sklearn_oracle() -> None:

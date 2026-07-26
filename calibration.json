@@ -1,0 +1,230 @@
+{
+  "seed": 42,
+  "method": "isotonic",
+  "models": {
+    "scorecard": {
+      "before": {
+        "brier": 0.201105,
+        "reliability": [
+          {
+            "mean_predicted": 0.130412,
+            "observed_rate": 0.012518,
+            "count": 6151
+          },
+          {
+            "mean_predicted": 0.202015,
+            "observed_rate": 0.024228,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.257316,
+            "observed_rate": 0.029268,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.310931,
+            "observed_rate": 0.037724,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.365718,
+            "observed_rate": 0.049911,
+            "count": 6151
+          },
+          {
+            "mean_predicted": 0.424861,
+            "observed_rate": 0.055122,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.490152,
+            "observed_rate": 0.082602,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.565796,
+            "observed_rate": 0.101626,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.656856,
+            "observed_rate": 0.15252,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.791778,
+            "observed_rate": 0.261746,
+            "count": 6151
+          }
+        ]
+      },
+      "after": {
+        "brier": 0.068256,
+        "reliability": [
+          {
+            "mean_predicted": 0.014179,
+            "observed_rate": 0.013331,
+            "count": 7201
+          },
+          {
+            "mean_predicted": 0.022116,
+            "observed_rate": 0.025585,
+            "count": 5511
+          },
+          {
+            "mean_predicted": 0.030047,
+            "observed_rate": 0.03088,
+            "count": 7092
+          },
+          {
+            "mean_predicted": 0.037943,
+            "observed_rate": 0.038415,
+            "count": 4920
+          },
+          {
+            "mean_predicted": 0.047533,
+            "observed_rate": 0.049621,
+            "count": 7255
+          },
+          {
+            "mean_predicted": 0.064265,
+            "observed_rate": 0.057918,
+            "count": 5784
+          },
+          {
+            "mean_predicted": 0.084881,
+            "observed_rate": 0.086451,
+            "count": 6628
+          },
+          {
+            "mean_predicted": 0.108947,
+            "observed_rate": 0.104829,
+            "count": 4846
+          },
+          {
+            "mean_predicted": 0.149014,
+            "observed_rate": 0.153063,
+            "count": 6383
+          },
+          {
+            "mean_predicted": 0.263257,
+            "observed_rate": 0.266361,
+            "count": 5883
+          }
+        ]
+      }
+    },
+    "challenger": {
+      "before": {
+        "brier": 0.184932,
+        "reliability": [
+          {
+            "mean_predicted": 0.096961,
+            "observed_rate": 0.012193,
+            "count": 6151
+          },
+          {
+            "mean_predicted": 0.16338,
+            "observed_rate": 0.018537,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.215917,
+            "observed_rate": 0.025366,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.269376,
+            "observed_rate": 0.038049,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.328192,
+            "observed_rate": 0.050236,
+            "count": 6151
+          },
+          {
+            "mean_predicted": 0.394479,
+            "observed_rate": 0.050569,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.467502,
+            "observed_rate": 0.073171,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.552844,
+            "observed_rate": 0.105203,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.652469,
+            "observed_rate": 0.152683,
+            "count": 6150
+          },
+          {
+            "mean_predicted": 0.78606,
+            "observed_rate": 0.281255,
+            "count": 6151
+          }
+        ]
+      },
+      "after": {
+        "brier": 0.067103,
+        "reliability": [
+          {
+            "mean_predicted": 0.01196,
+            "observed_rate": 0.012156,
+            "count": 6170
+          },
+          {
+            "mean_predicted": 0.023168,
+            "observed_rate": 0.020082,
+            "count": 8515
+          },
+          {
+            "mean_predicted": 0.030707,
+            "observed_rate": 0.02919,
+            "count": 4899
+          },
+          {
+            "mean_predicted": 0.036436,
+            "observed_rate": 0.039519,
+            "count": 5238
+          },
+          {
+            "mean_predicted": 0.047455,
+            "observed_rate": 0.048264,
+            "count": 7977
+          },
+          {
+            "mean_predicted": 0.063228,
+            "observed_rate": 0.055877,
+            "count": 4492
+          },
+          {
+            "mean_predicted": 0.07682,
+            "observed_rate": 0.075117,
+            "count": 6430
+          },
+          {
+            "mean_predicted": 0.112137,
+            "observed_rate": 0.110233,
+            "count": 6577
+          },
+          {
+            "mean_predicted": 0.164219,
+            "observed_rate": 0.164132,
+            "count": 6312
+          },
+          {
+            "mean_predicted": 0.301599,
+            "observed_rate": 0.304312,
+            "count": 4893
+          }
+        ]
+      }
+    }
+  }
+}

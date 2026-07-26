@@ -6,7 +6,7 @@ PY := .venv/bin/python
 VENV := python3.11 -m venv .venv
 endif
 
-.PHONY: install lint test download ingest features contract split binning scorecard challenger evaluate train sweep
+.PHONY: install lint test download ingest features contract split binning scorecard challenger evaluate calibrate train sweep
 
 install:
 	$(VENV)
@@ -51,6 +51,9 @@ challenger: split
 
 evaluate: scorecard challenger
 	$(PY) -m scoregate.evaluate
+
+calibrate: scorecard challenger
+	$(PY) -m scoregate.calibration
 
 # Full model training with W&B tracking. Depends on binning so the data chain
 # (features, contract, split, binning) is in place; train.py builds both models,
