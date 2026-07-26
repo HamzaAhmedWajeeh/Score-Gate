@@ -1,0 +1,39 @@
+# W&B Bayesian sweep for the LightGBM challenger. The objective is mean 5-fold CV
+# AUC on the training split only; the frozen holdout is never used for tuning. This
+# is separate from make train, which stays on the frozen configs/lightgbm.yaml. The
+# winning params get written back into that file as their own commit, after review.
+#
+# Build the pipeline first (make binning), then:
+#   make sweep                     # registers the sweep, prints the agent command
+#   wandb agent <sweep-id> --count N   # you choose the number of trials
+program: src/scoregate/sweep.py
+method: bayes
+metric:
+  name: cv_auc
+  goal: maximize
+parameters:
+  num_leaves:
+    distribution: int_uniform
+    min: 15
+    max: 255
+  max_depth:
+    distribution: int_uniform
+    min: 3
+    max: 12
+  learning_rate:
+    distribution: log_uniform_values
+    min: 0.01
+    max: 0.2
+  reg_lambda:
+    distribution: log_uniform_values
+    min: 0.001
+    max: 10
+  min_child_samples:
+    distribution: int_uniform
+    min: 20
+    max: 200
+command:
+  - ${env}
+  - python
+  - -m
+  - scoregate.sweep

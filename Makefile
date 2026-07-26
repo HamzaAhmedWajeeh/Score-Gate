@@ -6,7 +6,7 @@ PY := .venv/bin/python
 VENV := python3.11 -m venv .venv
 endif
 
-.PHONY: install lint test download ingest features contract split binning scorecard challenger evaluate train
+.PHONY: install lint test download ingest features contract split binning scorecard challenger evaluate train sweep
 
 install:
 	$(VENV)
@@ -57,3 +57,9 @@ evaluate: scorecard challenger
 # evaluates them, and mirrors the results into W&B. Runs offline with no key.
 train: binning
 	$(PY) -m scoregate.train
+
+# Register the W&B sweep and print the agent command. Build the pipeline first
+# (make binning). Launch trials with: wandb agent <sweep-id> --count N. Runs online
+# and is separate from make train, which stays on the frozen params.
+sweep:
+	$(PY) -m wandb sweep configs/sweep.yaml
