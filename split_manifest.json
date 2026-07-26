@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "holdout_fraction": 0.2,
+  "splits": {
+    "train": {
+      "rows": 246008,
+      "default_rate": 0.080729,
+      "id_sha256": "0a60d6508ae12903f3b9e4b985b2c5dee5582b318f9892ea82e8163c2672f4d9"
+    },
+    "holdout": {
+      "rows": 61503,
+      "default_rate": 0.080728,
+      "id_sha256": "86882d52ea880f41ec5e11c882f84f87f3611db8a493fd3930f7e5b494fbd9fe"
+    }
+  }
+}
