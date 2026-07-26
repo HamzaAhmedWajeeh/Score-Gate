@@ -35,6 +35,12 @@ dev = [
     "types-PyYAML",
 ]
 
+# Console entry point for one sweep trial. The generated scoregate-sweep shim runs
+# the venv interpreter directly, which the W&B agent needs on Windows where a bare
+# "python" resolves to the Store alias even inside an activated venv.
+[project.scripts]
+scoregate-sweep = "scoregate.sweep:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

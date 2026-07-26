@@ -3,16 +3,20 @@
 # is separate from make train, which stays on the frozen configs/lightgbm.yaml. The
 # winning params get written back into that file as their own commit, after review.
 #
-# Build the pipeline first (make binning), then:
-#   make sweep                     # registers the sweep, prints the agent command
-#   wandb agent <sweep-id> --count N   # you choose the number of trials
+# Build the pipeline first (make binning), then launch the agent from an activated
+# venv:
+#   make binning
+#   make sweep                       # registers the sweep, prints the agent command
+#   wandb agent <sweep-id> --count N # you choose the number of trials
 #
-# The sweep must run with scoregate importable: launch the agent from an activated
-# venv, or rely on the pinned interpreter below. W&B spawns each trial as a fresh
-# subprocess that does NOT inherit the make-sweep -m invocation's environment, so a
-# bare "python" can resolve to the wrong interpreter (e.g. Windows Store Python) that
-# can't see the installed package. ${interpreter} pins it to the venv python that
-# registered the sweep.
+# The trial runs via the scoregate-sweep console entry point (from the editable
+# install), not a bare "python". W&B templating cannot select an interpreter portably:
+# ${interpreter} is hardcoded to the literal "python", and there is no env-var macro.
+# On Windows a bare "python" resolves to the Store App Execution Alias in the spawned
+# trial subprocess, even inside an activated venv. scoregate-sweep has no such alias
+# and its shim points straight at the venv interpreter, so the package is importable.
+# The shim carries each machine's own venv path, so nothing machine-specific lands
+# here in the committed config.
 project: scoregate
 program: src/scoregate/sweep.py
 method: bayes
@@ -42,6 +46,4 @@ parameters:
     max: 200
 command:
   - ${env}
-  - ${interpreter}
-  - -m
-  - scoregate.sweep
+  - scoregate-sweep

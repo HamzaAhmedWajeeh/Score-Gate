@@ -90,10 +90,24 @@ make train                   # the whole pipeline, end to end
 it off, `make train` already stays offline without a key, or run the module with
 `--no-wandb`.
 
-To tune the challenger:
+To tune the challenger, launch the sweep agent from an activated venv (the trial runs
+through the `scoregate-sweep` entry point, so the venv interpreter is used):
 
 ```
 make sweep                   # register the Bayesian sweep, prints the agent command
+```
+
+Windows PowerShell:
+
+```
+.\.venv\Scripts\Activate.ps1
+wandb agent <sweep-id> --count N
+```
+
+POSIX:
+
+```
+source .venv/bin/activate
 wandb agent <sweep-id> --count N
 ```
 

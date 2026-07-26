@@ -9,6 +9,10 @@ commit, after review.
 The cross-validation splits inside train, so this never leaks the holdout, and the
 folds are seeded for reproducibility. wandb is imported only in main(), so the CV core
 stays importable and testable without a tracking dependency.
+
+main() is exposed as the scoregate-sweep console entry point, which the W&B agent runs
+per trial. That shim points at the venv interpreter directly, which is how the agent
+finds the package on Windows where a bare "python" resolves to the Store alias.
 """
 
 from pathlib import Path
