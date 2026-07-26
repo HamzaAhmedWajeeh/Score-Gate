@@ -6,6 +6,14 @@
 # Build the pipeline first (make binning), then:
 #   make sweep                     # registers the sweep, prints the agent command
 #   wandb agent <sweep-id> --count N   # you choose the number of trials
+#
+# The sweep must run with scoregate importable: launch the agent from an activated
+# venv, or rely on the pinned interpreter below. W&B spawns each trial as a fresh
+# subprocess that does NOT inherit the make-sweep -m invocation's environment, so a
+# bare "python" can resolve to the wrong interpreter (e.g. Windows Store Python) that
+# can't see the installed package. ${interpreter} pins it to the venv python that
+# registered the sweep.
+project: scoregate
 program: src/scoregate/sweep.py
 method: bayes
 metric:
@@ -34,6 +42,6 @@ parameters:
     max: 200
 command:
   - ${env}
-  - python
+  - ${interpreter}
   - -m
   - scoregate.sweep
